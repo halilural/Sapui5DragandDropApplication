@@ -1,9 +1,81 @@
-<mvc:View controllerName="com.uralhalil.draganddropappDragandDropApplication.controller.Main" xmlns:html="http://www.w3.org/1999/xhtml"
-	xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+<mvc:View xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:dnd="sap.ui.core.dnd"
+	xmlns:control="com.uralhalil.draganddropappDragandDropApplication.control"
+	controllerName="com.uralhalil.draganddropappDragandDropApplication.controller.Main" displayBlock="true">
 	<App>
 		<pages>
 			<Page title="{i18n>title}">
-				<content></content>
+				<content>
+					<sap.ui.layout:VerticalLayout xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="__layout0">
+						<sap.ui.layout:content>
+							<Table xmlns="sap.m" id="idItemTable" inset="false" items="{ path: 'viewModel>/items', sorter: { path: 'ItemNumber' } }">
+								<headerToolbar>
+									<OverflowToolbar>
+										<content>
+											<Title text="Sales Order Items" level="H2"/>
+											<ToolbarSpacer/>
+										</content>
+									</OverflowToolbar>
+								</headerToolbar>
+								<infoToolbar>
+									<OverflowToolbar>
+										<Label text="Some Sales Order Items for dragging and dropping them"/>
+									</OverflowToolbar>
+								</infoToolbar>
+								<columns>
+									<Column width="12em">
+										<Text text="Item Number"/>
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true">
+										<Text text="Material Number"/>
+									</Column>
+									<Column minScreenWidth="Desktop" demandPopin="true" hAlign="End">
+										<Text text="Quantity"/>
+									</Column>
+									<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Center">
+										<Text text="Price"/>
+									</Column>
+								</columns>
+								<dragDropConfig>
+									<dnd:DragInfo sourceAggregation="items"/>
+								</dragDropConfig>
+								<items>
+									<ColumnListItem>
+										<cells>
+											<Text text="{viewModel>ItemNumber}"/>
+											<ObjectIdentifier title="{viewModel>Name}" text="{viewModel>Matnr}"/>
+											<ObjectNumber number="{viewModel>Quantity}" unit="{viewModel>Unit}" state="{ parts: [ {path: 'Quantity'}, {path: 'Unit'} ] }"/>
+											<ObjectNumber
+												number="{ parts:[{path:'viewModel>Price'},{path:'viewModel&gt;Currency'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }"
+												unit="{viewModel>Currency}"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<FlexBox width="100%" id="__box1" alignItems="Center" justifyContent="Center">
+								<items>
+									<Button class="sapUiTinyMarginEnd" text="Get Data!" width="500px" type="Emphasized" press="onGetInitialData"></Button>
+									<control:DeleteButton text="Drop Here Also!" width="500px" id="__button2" type="Emphasized" press="onDropPress">
+										<control:dragDropConfig>
+											<dnd:DropInfo drop=".onDelete" dropEffect="Link"/>
+										</control:dragDropConfig>
+									</control:DeleteButton>
+								</items>
+							</FlexBox>
+						</sap.ui.layout:content>
+					</sap.ui.layout:VerticalLayout>
+				</content>
+				<footer>
+					<Toolbar width="100%" id="__toolbar3">
+						<content>
+							<ToolbarSpacer id="__spacer1"/>
+							<control:DeleteButton text="Drop here!" width="100px" id="__button1" type="Reject">
+								<control:dragDropConfig>
+									<dnd:DropInfo drop=".onDelete" dropEffect="Link"/>
+								</control:dragDropConfig>
+							</control:DeleteButton>
+						</content>
+					</Toolbar>
+				</footer>
 			</Page>
 		</pages>
 	</App>
